@@ -1,86 +1,53 @@
 const { Repair } = require('../models/repairModels');
-
-const getAllRepairs = async (req, res) => {
-  try {
-    const repairs = await Repair.findAll();
+const {catchAsync} = require('../utils/catchAsync')
+const {User} = require('../models/userModels')
+const getAllRepairs = catchAsync( async (req, res, next) => {
+    const repairs = await Repair.findAll({  
+      include:[{model: User}]});
     res.status(200).json({ repairs });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  
+});
 
-const createRepair = async (req, res) => {
-  try {
-    const { date, userId } = req.body;
-    const newRepair = await Repair.create({ date, userId });
+const createRepair = catchAsync( async (req, res,next) => {
+
+    const { date, userId,computerNumber,comments } = req.body;
+    const newRepair = await Repair.create({ date, userId, computerNumber, comments });
     res.status(201).json({ newRepair });
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-const getRepairById = async (req, res) => {
-  try {
-    const { id } = req.params;
+});
 
-    const repair = await Repair.findOne({ where: { id } });
-
-    if (!repair) {
-      return res
-        .status(404)
-        .json({ status: 'error', message: 'Repair not found given that id' });
-    }
+const getRepairById = catchAsync( async (req, res,next) => {
+ 
+    const {repair}=req; 
 
     res.status(200).json({
       repair,
     });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  
+});
 
-const updateRepair = async (req, res) => {
-  try {
-    const { id } = req.params;
+const updateRepair = catchAsync( async (req, res,next) => {
+   const {repair}= req
     const { status } = req.body;
 
-    const repair = await Repair.findOne({ where: { id } });
-
-    if (!repair) {
-      return res
-        .status(404)
-        .json({ status: 'error', message: 'Repair not found given that id' });
-    }
+   
 
     await repair.update({ status });
 
     res.status(200).json({ status: 'Success' });
-  } catch (error) {
-    console.log(error);
-  }
-};
+ 
+});
 
-const deleteRepair = async (req, res) => {
-  try {
-    const { id } = req.params;
+const deleteRepair = catchAsync( async (req, res,next) => {
 
-    const repair = await Repair.findOne({ where: { id } });
-
-    if (!repair) {
-      return res
-        .status(404)
-        .json({ status: 'error', message: 'repair not found' });
-    }
-
+   const {repair} = req;
     await repair.update({ status: 'deleted' });
 
     res.status(200).json({
       status: 'success',
     });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  
+});
 
 module.exports = {
   getAllRepairs,

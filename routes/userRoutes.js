@@ -1,4 +1,9 @@
 const express = require('express');
+const { userExists } = require('../middlewares/userMiddlewares');
+const {
+  createUserValidations,
+  checkValidations,
+} = require('../middlewares/validationsMiddlewares');
 const {
   getAllUsers,
   createUser,
@@ -10,10 +15,12 @@ const {
 const router = express.Router();
 
 router.get('/', getAllUsers);
-router.post('/', createUser);
-router.route('/:id')
-.get(getUserById)
-.patch(updateUser)
-.delete(deleteUser);
+router.post('/', createUserValidations, checkValidations, createUser);
 
-module.exports = { userRouter: router };
+router
+  .route('/:id')
+  .get(userExists, getUserById)
+  .patch(userExists, updateUser)
+  .delete(userExists, deleteUser);
+
+module.exports = { usersRouter: router };

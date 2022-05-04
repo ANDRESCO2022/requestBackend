@@ -1,30 +1,29 @@
-const express = require("express");
+const express = require('express');
+ const cors = require('cors');
+ const rateLimit = require('express-rate-limit');
 
-const { userRouter } = require('./routes/userRoutes');
-const { repairRouter } = require('./routes/repairRoutes');
+ const {globalErrorHandler} =require('./controllers/errorControllers')
 
+const { usersRouter } = require('./routes/userRoutes');
+const { repairsRouter } = require('./routes/repairRoutes');
 
-const { db } = require("./utils/data");
-
+const { db } = require('./utils/data');
 
 const app = express();
+ 
+app.use(cors())
+app.use(express.json());
+const limiter = rateLimit({
+  max: 1000,
+  windowMs: 1 * 60 * 60 * 1000,
+  message: 'Too many requests from this IP',
+});
 
+app.use(limiter);
 app.use(express.json());
 
+app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/repairs', repairsRouter);
 
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/repairs", repairRouter);
-
-db.authenticate()
-  .then(() => console.log("Database authenticated"))
-  .catch((err) => console.log(err));
-
-db.sync() 
-  .then(() => console.log("Database synced"))
-  .catch((err) => console.log(err));
-
-
-const PORT = 3500;
-app.listen(PORT, () => {
-  console.log(`Express app runnning in: ${PORT}`);
-});
+app.use('*',globalErrorHandler)
+module.exports={app}

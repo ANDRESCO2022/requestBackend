@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { db } = require('../utils/data');
 
-
 const Repair = db.define('repair', {
   id: {
     primaryKey: true,
@@ -16,6 +15,14 @@ const Repair = db.define('repair', {
   status: {
     type: DataTypes.STRING,
     defaultValue: 'pending',
+  },
+  computerNumber: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  comments: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   userId: {
     type: DataTypes.INTEGER,

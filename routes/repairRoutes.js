@@ -1,4 +1,9 @@
 const express = require('express');
+const { repairExists } = require('../middlewares/repairMiddlewares');
+const {
+  createRepairValidations,
+  checkValidations,
+} = require('../middlewares/validationsMiddlewares');
 const {
   getAllRepairs,
   createRepair,
@@ -10,11 +15,11 @@ const {
 const router = express.Router();
 
 router.get('/', getAllRepairs);
-router.post('/', createRepair);
+router.post('/', createRepairValidations, checkValidations, createRepair);
 router
   .route('/:id')
-  .get(getRepairById)
-  .patch(updateRepair)
-  .delete(deleteRepair);
+  .get(repairExists, getRepairById)
+  .patch(repairExists, updateRepair)
+  .delete(repairExists, deleteRepair);
 
-module.exports = { repairRouter: router };
+module.exports = { repairsRouter: router };
