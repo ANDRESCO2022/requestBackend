@@ -11,7 +11,6 @@ const protectToken = catchAsync(async (req, res, next) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
-
     token = req.headers.authorization.split(' ')[1];
   }
 
@@ -19,7 +18,6 @@ const protectToken = catchAsync(async (req, res, next) => {
     return next(new AppError('Session invalid', 403));
   }
 
- 
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
   const user = await User.findOne({
@@ -36,37 +34,30 @@ const protectToken = catchAsync(async (req, res, next) => {
   next();
 });
 const protectAccountOwner = catchAsync(async (req, res, next) => {
-
   const { sessionUser, user } = req;
 
-
   if (sessionUser.id !== user.id) {
-  
     return next(new AppError('You do not own this account', 403));
   }
 
   next();
 });
 
-
-const protectAdmin = catchAsync(async (req, res, next) => {
-  if (req.sessionUser.role !== 'admin') {
-    return next(new AppError('Access not granted', 403));
-  }
-
-  next();
-});
 const protectEmploye = catchAsync(async (req, res, next) => {
-  if (req.sessionUser.role !== 'employe') {
+  if (req.sessionUser.role !== 'employee') {
     return next(new AppError('Access not granted', 403));
   }
 
   next();
 });
+
 
 const userExists = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const user = await User.findOne({ where: { id } });
+  const user = await User.findOne({
+    where: { id },
+    attributes: { exclude: ['password'] },
+  });
   if (!user) {
     return next(new AppError('User does not exist with given Id', 404));
   }
@@ -75,9 +66,11 @@ const userExists = catchAsync(async (req, res, next) => {
   next();
 });
 
-module.exports = { 
+module.exports = {
   userExists,
   protectToken,
-  protectAdmin,
+
   protectAccountOwner,
-  protectEmploye,};
+
+  protectEmploye,
+};

@@ -4,7 +4,7 @@ const { body } = require('express-validator');
 const {
   userExists,
   protectToken,
-  protectAdmin,
+  protectEmploye,
   protectAccountOwner,
 } = require('../middlewares/userMiddlewares');
 const {
@@ -27,12 +27,12 @@ router.post('/login', login);
 
   router.use(protectToken);
 
-  router.get('/', protectAdmin, getAllUsers)
+  router.get('/', protectEmploye, getAllUsers);
 
 router.get('/check-token', checkToken);
 router
   .route('/:id')
-  .get(protectAdmin,userExists, getUserById)
+  .get(protectEmploye,userExists, getUserById)
   .patch(userExists, protectAccountOwner, updateUser)
   .delete(userExists, protectAccountOwner, deleteUser);
 

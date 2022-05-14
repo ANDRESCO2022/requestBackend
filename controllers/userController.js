@@ -30,10 +30,8 @@ const createUser = catchAsync(async (req, res, next) => {
 });
 
 const getUserById = catchAsync(async (req, res, next) => {
- // const { user } = req;
- const user = await User.findAll({
-   attributes: { exclude: ['password'] },
- });
+ const { user } = req;
+
   res.status(200).json({
     user,
   });
