@@ -5,16 +5,18 @@ const {
   checkValidations,
 } = require('../middlewares/validationsMiddlewares');
 const {
-  getAllRepairs,
-  createRepair,
+  getAllCompletedRepairs,
+  getAllPendingRepairs,
   getRepairById,
   updateRepair,
   deleteRepair,
+  createRepair,
 } = require('../controllers/reparController');
 
 const router = express.Router();
 
-router.get('/', getAllRepairs);
+router.get('/completed',  getAllCompletedRepairs)
+router.get('/pending', getAllPendingRepairs);
 router.post('/', createRepairValidations, checkValidations, createRepair);
 router
   .route('/:id')

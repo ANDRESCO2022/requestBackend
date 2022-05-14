@@ -24,12 +24,12 @@ const User = db.define('user', {
   },
   role: {
     type: DataTypes.STRING,
-    unique: false,
     allowNull: false,
   },
   status: {
     type: DataTypes.STRING,
-    defaultValue: 'available',
+    allowNull: false,
+    defaultValue: 'active',
   },
 });
 module.exports = { User };

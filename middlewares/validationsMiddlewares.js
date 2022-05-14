@@ -12,6 +12,7 @@ const createUserValidations = [
     .withMessage('Password cannot be empty')
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters long'),
+  body('role').notEmpty().withMessage('Role cannot be empty'),
 ];
 const createRepairValidations = [
   body('date').notEmpty().withMessage('Date cannot be empty'),

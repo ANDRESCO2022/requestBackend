@@ -4,7 +4,7 @@ const express = require('express');
 
  const {globalErrorHandler} =require('./controllers/errorControllers')
 
-const { usersRouter } = require('./routes/userRoutes');
+const { userRouter } = require('./routes/userRoutes');
 const { repairsRouter } = require('./routes/repairRoutes');
 
 const { db } = require('./utils/data');
@@ -22,7 +22,7 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(express.json());
 
-app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/users', userRouter);
 app.use('/api/v1/repairs', repairsRouter);
 
 app.use('*',globalErrorHandler)
