@@ -43,7 +43,7 @@ const protectAccountOwner = catchAsync(async (req, res, next) => {
   next();
 });
 
-const protectEmploye = catchAsync(async (req, res, next) => {
+const protectEmployee = catchAsync(async (req, res, next) => {
   if (req.sessionUser.role !== 'employee') {
     return next(new AppError('Access not granted', 403));
   }
@@ -72,5 +72,5 @@ module.exports = {
 
   protectAccountOwner,
 
-  protectEmploye,
+  protectEmployee,
 };

@@ -1,6 +1,6 @@
 const express = require('express');
 const { repairExists} = require('../middlewares/repairMiddlewares');
-const { protectToken,protectEmploye}= require('../middlewares/userMiddlewares')
+const { protectToken,protectEmployee}= require('../middlewares/userMiddlewares')
 const {
   createRepairValidations,
   checkValidations,
@@ -17,12 +17,12 @@ const {
 const router = express.Router();
 router.post('/', createRepairValidations, checkValidations, createRepair);
 router.use(protectToken);
-router.get('/completed', protectEmploye, getAllCompletedRepairs)
-router.get('/pending', protectEmploye, getAllPendingRepairs);
+router.get('/completed', protectEmployee, getAllCompletedRepairs)
+router.get('/pending', protectEmployee, getAllPendingRepairs);
 router
   .route('/:id')
-  .get(repairExists, protectEmploye, getRepairById)
-  .patch(repairExists,protectEmploye, updateRepair)
-  .delete(repairExists, protectEmploye, deleteRepair);
+  .get(repairExists, protectEmployee, getRepairById)
+  .patch(repairExists,protectEmployee, updateRepair)
+  .delete(repairExists, protectEmployee, deleteRepair);
 
 module.exports = { repairsRouter: router };
